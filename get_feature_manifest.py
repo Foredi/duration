@@ -252,7 +252,7 @@ def main():
     parser.add_argument("--normalize-volume", "-n", action="store_true")
     parser.add_argument("--textgrid-zip", type=str, default=None)
     parser.add_argument("--id-to-units-tsv", type=str, default=None)
-    parser.add_argument("--add-fastspeech-targets", action="store_true")
+    parser.add_argument("--add-fastspeech-targets", action="store_true", default=True)
     parser.add_argument("--snr-threshold", type=float, default=None)
     parser.add_argument("--cer-threshold", type=float, default=None)
     parser.add_argument("--cer-tsv-path", type=str, default="")
