@@ -135,6 +135,7 @@ def process(args):
             x["id"]: x["uer"] for x in load_tsv_to_dicts(args.cer_tsv_path)
         }
     manifest_by_split = {split: defaultdict(list) for split in args.splits}
+    
     for sample in tqdm(samples):
         sample_id, split = sample["id"], sample["split"]
 
@@ -159,19 +160,19 @@ def process(args):
         manifest_by_split[split]["speaker"].append(sample["speaker"])
         manifest_by_split[split]["src_text"].append(sample["src_text"])
         
-        if args.add_fastspeech_targets:
-            assert id_to_alignment is not None
-            duration = " ".join(
-                str(d) for d in id_to_alignment[sample_id].frame_durations
-            )
-            manifest_by_split[split]["duration"].append(duration)
-            manifest_by_split[split]["pitch"].append(pitch_paths[sample_id])
-            manifest_by_split[split]["energy"].append(energy_paths[sample_id])
-    for split in args.splits:
-        save_df_to_tsv(
-            pd.DataFrame.from_dict(manifest_by_split[split]),
-            out_root / f"{split}.tsv"
+        # if args.add_fastspeech_targets:
+        assert id_to_alignment is not None
+        duration = " ".join(
+            str(d) for d in id_to_alignment[sample_id].frame_durations
         )
+        manifest_by_split[split]["duration"].append(duration)
+        manifest_by_split[split]["pitch"].append(pitch_paths[sample_id])
+        manifest_by_split[split]["energy"].append(energy_paths[sample_id])
+    for split in args.splits:
+            save_df_to_tsv(
+                pd.DataFrame.from_dict(manifest_by_split[split]),
+                out_root / f"{split}.tsv"
+            )
     
     # Generate vocab
     vocab_name, spm_filename = None, None
