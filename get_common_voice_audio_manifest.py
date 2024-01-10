@@ -19,15 +19,14 @@ from speech_to_text.data_utils import load_df_from_tsv, save_df_to_tsv
 
 log = logging.getLogger(__name__)
 
-SPLITS = ["train", "test"]
+SPLITS = ["train", "dev", "test"]
 
 
 def get_top_n(
-        root: Path, n_speakers: int = 10, min_n_tokens: int = 2
+        root: Path, n_speakers: int = 10, min_n_tokens: int = 5
 ) -> pd.DataFrame:
-    df = load_df_from_tsv(root / "train.tsv")
+    df = load_df_from_tsv(root / "validated.tsv")
     df["n_tokens"] = [len(s.split()) for s in df["sentence"]]
-    df["id"] = [Path(p).stem for p in df["path"]]
     df = df[df["n_tokens"] >= min_n_tokens]
     df["n_frames"] = [
         torchaudio.info((root / "clips" / p).as_posix()).num_frames
@@ -65,6 +64,7 @@ def get_splits(
         cur_shuffled_indices = [cur_indices[i] for i in cur_shuffled_indices]
         cur_indices_by_split = {
             "train": cur_shuffled_indices[:cur_n_train],
+            "dev": cur_shuffled_indices[cur_n_train: cur_n_train + cur_n_dev],
             "test": cur_shuffled_indices[cur_n_train + cur_n_dev:]
         }
         for split in SPLITS:
@@ -105,7 +105,6 @@ def process(args):
     for sample in tqdm(df_top_n.to_dict(orient="index").values()):
         sample_id = sample["id"]
         split = id_to_split[sample_id]
-        print(split)
         manifest_by_split[split]["id"].append(sample_id)
         if args.convert_to_wav:
             audio_path = data_root / "wav" / f"{sample_id}.wav"
