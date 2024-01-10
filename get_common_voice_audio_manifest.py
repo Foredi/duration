@@ -23,7 +23,7 @@ SPLITS = ["train", "test"]
 
 
 def get_top_n(
-        root: Path, n_speakers: int = 10, min_n_tokens: int = 5
+        root: Path, n_speakers: int = 10, min_n_tokens: int = 2
 ) -> pd.DataFrame:
     df = load_df_from_tsv(root / "train.tsv")
     df["n_tokens"] = [len(s.split()) for s in df["sentence"]]
