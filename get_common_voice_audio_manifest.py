@@ -43,10 +43,10 @@ def get_top_n(
 
 
 def get_splits(
-        df, train_split_ratio=0.8, speaker_in_all_splits=False, rand_seed=0
+        df, train_split_ratio=20/41, speaker_in_all_splits=False, rand_seed=0
 ) -> Tuple[Dict[str, str], List[str]]:
     np.random.seed(rand_seed)
-    dev_split_ratio = (1. - train_split_ratio) / 3
+    dev_split_ratio = (1. - train_split_ratio) / 2
     grouped = list(df.groupby("client_id"))
     id_to_split = {}
     for _, cur_df in tqdm(grouped):
