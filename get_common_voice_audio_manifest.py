@@ -65,7 +65,6 @@ def get_splits(
         cur_shuffled_indices = [cur_indices[i] for i in cur_shuffled_indices]
         cur_indices_by_split = {
             "train": cur_shuffled_indices[:cur_n_train],
-            "dev": cur_shuffled_indices[cur_n_train: cur_n_train + cur_n_dev],
             "test": cur_shuffled_indices[cur_n_train + cur_n_dev:]
         }
         for split in SPLITS:
