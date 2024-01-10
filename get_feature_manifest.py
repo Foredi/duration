@@ -157,6 +157,7 @@ def process(args):
         manifest_by_split[split]["tgt_text"].append(normalized_utt)
         manifest_by_split[split]["speaker"].append(sample["speaker"])
         manifest_by_split[split]["src_text"].append(sample["src_text"])
+        print(args.add_fastspeech_targets)
         if args.add_fastspeech_targets:
             assert id_to_alignment is not None
             duration = " ".join(
@@ -170,6 +171,7 @@ def process(args):
             pd.DataFrame.from_dict(manifest_by_split[split]),
             out_root / f"{split}.tsv"
         )
+    
     # Generate vocab
     vocab_name, spm_filename = None, None
     if id_to_alignment is not None or args.ipa_vocab:
