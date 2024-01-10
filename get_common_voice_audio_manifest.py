@@ -40,7 +40,6 @@ def get_top_n(
     top_n_total_duration_ms = total_duration_ms.head(n_speakers)
     top_n_client_ids = set(top_n_total_duration_ms.index.tolist())
     df_top_n = df[df["client_id"].isin(top_n_client_ids)]
-    print(df_top_n.head())
     return df_top_n
 
 
@@ -107,6 +106,7 @@ def process(args):
     for sample in tqdm(df_top_n.to_dict(orient="index").values()):
         sample_id = sample["id"]
         split = id_to_split[sample_id]
+        print(split)
         manifest_by_split[split]["id"].append(sample_id)
         if args.convert_to_wav:
             audio_path = data_root / "wav" / f"{sample_id}.wav"
