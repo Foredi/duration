@@ -40,6 +40,7 @@ def get_top_n(
     top_n_total_duration_ms = total_duration_ms.head(n_speakers)
     top_n_client_ids = set(top_n_total_duration_ms.index.tolist())
     df_top_n = df[df["client_id"].isin(top_n_client_ids)]
+    print(df_top_n.head())
     return df_top_n
 
 
