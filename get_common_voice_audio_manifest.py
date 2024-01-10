@@ -19,15 +19,14 @@ from speech_to_text.data_utils import load_df_from_tsv, save_df_to_tsv
 
 log = logging.getLogger(__name__)
 
-SPLITS = ["train", "test"]
+SPLITS = ["train", "dev", "test"]
 
 
 def get_top_n(
-        root: Path, n_speakers: int = 10, min_n_tokens: int = 5
+        root: Path, n_speakers: int = 10, min_n_tokens: int = 2
 ) -> pd.DataFrame:
-    df = load_df_from_tsv(root / "train.tsv")
+    df = load_df_from_tsv(root / "validated.tsv")
     df["n_tokens"] = [len(s.split()) for s in df["sentence"]]
-    df["id"] = [Path(p).stem for p in df["path"]]
     df = df[df["n_tokens"] >= min_n_tokens]
     df["n_frames"] = [
         torchaudio.info((root / "clips" / p).as_posix()).num_frames
@@ -98,8 +97,7 @@ def process(args):
 
     df_top_n = get_top_n(data_root)
     id_to_split, speakers = get_splits(df_top_n)
-    print(id_to_split)
-    return
+
     if args.convert_to_wav:
         convert_to_wav(data_root, df_top_n["path"].tolist())
 
