@@ -68,6 +68,7 @@ def get_splits(
             "test": cur_shuffled_indices[cur_n_train + cur_n_dev:]
         }
         for split in SPLITS:
+            print(f"Split {split}: {len(cur_indices_by_split[split])}")
             for i in cur_indices_by_split[split]:
                 id_ = df["id"].loc[i]
                 id_to_split[id_] = split
