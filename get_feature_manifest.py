@@ -34,6 +34,7 @@ log = logging.getLogger(__name__)
 
 
 def process(args):
+    print(args.add_fastspeech_targets)
     assert "train" in args.splits
     out_root = Path(args.output_root).absolute()
     out_root.mkdir(exist_ok=True)
@@ -157,7 +158,7 @@ def process(args):
         manifest_by_split[split]["tgt_text"].append(normalized_utt)
         manifest_by_split[split]["speaker"].append(sample["speaker"])
         manifest_by_split[split]["src_text"].append(sample["src_text"])
-        print(args.add_fastspeech_targets)
+        
         if args.add_fastspeech_targets:
             assert id_to_alignment is not None
             duration = " ".join(
