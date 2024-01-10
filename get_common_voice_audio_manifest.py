@@ -19,14 +19,15 @@ from speech_to_text.data_utils import load_df_from_tsv, save_df_to_tsv
 
 log = logging.getLogger(__name__)
 
-SPLITS = ["train", "dev", "test"]
+SPLITS = ["train", "test"]
 
 
 def get_top_n(
-        root: Path, n_speakers: int = 10, min_n_tokens: int = 2
+        root: Path, n_speakers: int = 10, min_n_tokens: int = 5
 ) -> pd.DataFrame:
-    df = load_df_from_tsv(root / "validated.tsv")
+    df = load_df_from_tsv(root / "train.tsv")
     df["n_tokens"] = [len(s.split()) for s in df["sentence"]]
+    df["id"] = [Path(p).stem for p in df["path"]]
     df = df[df["n_tokens"] >= min_n_tokens]
     df["n_frames"] = [
         torchaudio.info((root / "clips" / p).as_posix()).num_frames
@@ -43,16 +44,14 @@ def get_top_n(
 
 
 def get_splits(
-        df, train_split_ratio=20/41, speaker_in_all_splits=False, rand_seed=0
+        df, train_split_ratio=0.99, speaker_in_all_splits=False, rand_seed=0
 ) -> Tuple[Dict[str, str], List[str]]:
     np.random.seed(rand_seed)
-    dev_split_ratio = (1. - train_split_ratio) / 2
+    dev_split_ratio = (1. - train_split_ratio) / 3
     grouped = list(df.groupby("client_id"))
-    print(grouped)
     id_to_split = {}
     for _, cur_df in tqdm(grouped):
         cur_n_examples = len(cur_df)
-        print(cur_n_examples)
         if speaker_in_all_splits and cur_n_examples < 3:
             continue
         cur_n_train = int(cur_n_examples * train_split_ratio)
@@ -99,7 +98,8 @@ def process(args):
 
     df_top_n = get_top_n(data_root)
     id_to_split, speakers = get_splits(df_top_n)
-
+    print(id_to_split)
+    return
     if args.convert_to_wav:
         convert_to_wav(data_root, df_top_n["path"].tolist())
 
