@@ -43,7 +43,7 @@ def get_top_n(
 
 
 def get_splits(
-        df, train_split_ratio=0.99, speaker_in_all_splits=False, rand_seed=0
+        df, train_split_ratio=0.8, speaker_in_all_splits=False, rand_seed=0
 ) -> Tuple[Dict[str, str], List[str]]:
     np.random.seed(rand_seed)
     dev_split_ratio = (1. - train_split_ratio) / 3
@@ -68,7 +68,6 @@ def get_splits(
             "test": cur_shuffled_indices[cur_n_train + cur_n_dev:]
         }
         for split in SPLITS:
-            print(f"Split {split}: {len(cur_indices_by_split[split])}")
             for i in cur_indices_by_split[split]:
                 id_ = df["id"].loc[i]
                 id_to_split[id_] = split
