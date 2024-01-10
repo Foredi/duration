@@ -48,6 +48,8 @@ def get_splits(
     np.random.seed(rand_seed)
     dev_split_ratio = (1. - train_split_ratio) / 3
     grouped = list(df.groupby("client_id"))
+    print("dev_split_ratio = ", dev_split_ratio)
+    print(grouped)
     id_to_split = {}
     for _, cur_df in tqdm(grouped):
         cur_n_examples = len(cur_df)
