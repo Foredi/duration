@@ -28,7 +28,6 @@ def get_top_n(
     df = load_df_from_tsv(root / "train.tsv")
     df["n_tokens"] = [len(s.split()) for s in df["sentence"]]
     df["id"] = [Path(p).stem for p in df["path"]]
-    print(df["id"].head())
     df = df[df["n_tokens"] >= min_n_tokens]
     df["n_frames"] = [
         torchaudio.info((root / "clips" / p).as_posix()).num_frames
