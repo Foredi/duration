@@ -31,7 +31,7 @@ PAD_TOKEN, PAD_TOKEN_ID = "<pad>", 1
 
 def gen_vocab(
     input_path: Path, output_path_prefix: Path, model_type="bpe",
-    vocab_size=1000, special_symbols: Optional[List[str]] = None
+    vocab_size=84, special_symbols: Optional[List[str]] = None
 ):
     # Train SentencePiece Model
     arguments = [
