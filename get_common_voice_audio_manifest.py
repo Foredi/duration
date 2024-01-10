@@ -48,9 +48,11 @@ def get_splits(
     np.random.seed(rand_seed)
     dev_split_ratio = (1. - train_split_ratio) / 2
     grouped = list(df.groupby("client_id"))
+    print(grouped)
     id_to_split = {}
     for _, cur_df in tqdm(grouped):
         cur_n_examples = len(cur_df)
+        print(cur_n_examples)
         if speaker_in_all_splits and cur_n_examples < 3:
             continue
         cur_n_train = int(cur_n_examples * train_split_ratio)
