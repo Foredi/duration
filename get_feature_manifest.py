@@ -235,7 +235,7 @@ def main():
     parser.add_argument("--audio-manifest-root", "-m", required=True, type=str)
     parser.add_argument("--output-root", "-o", required=True, type=str)
     parser.add_argument("--splits", "-s", type=str, nargs="+",
-                        default=["train", "dev", "test"])
+                        default=["train", "test"])
     parser.add_argument("--ipa-vocab", action="store_true")
     parser.add_argument("--use-g2p", action="store_true")
     parser.add_argument("--lang", type=str, default="en-us")
